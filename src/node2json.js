@@ -2,6 +2,17 @@
 
 const util = require('./util');
 
+const convertArrayLikeObj =  function(obj) {
+  const keys = Object.keys(obj)
+  keys.forEach(key => {
+    if (obj[key] && typeof obj[key] === 'object' && !Array.isArray(obj[key]) && obj[key].length >= 0) {
+      obj[key] = Array.from(obj[key])
+    }
+    if (obj[key] && typeof obj[key] === "object") convertArrayLikeObj(obj[key])
+  })
+  return obj
+}
+
 const convertToJson = function(node, options) {
   const jObj = {};
 
@@ -47,7 +58,7 @@ const convertToJson = function(node, options) {
   }
 
   //add value
-  return jObj;
+  return convertArrayLikeObj(jObj);
 };
 
 exports.convertToJson = convertToJson;

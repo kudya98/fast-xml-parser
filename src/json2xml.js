@@ -130,18 +130,24 @@ Parser.prototype.j2x = function(jObj, level) {
       } else {
         //nested nodes
         const arrLen = jObj[key].length;
-        for (let j = 0; j < arrLen; j++) {
-          const item = jObj[key][j];
-          if (typeof item === 'undefined') {
-            // supress undefined node
-          } else if (item === null) {
-            val += this.indentate(level) + '<' + key + '/' + this.tagEndChar;
-          } else if (typeof item === 'object') {
-            const result = this.j2x(item, level + 1);
-            val += this.buildObjNode(result.val, key, result.attrStr, level);
-          } else {
-            val += this.buildTextNode(item, key, '', level);
+        if (arrLen === 0) {
+          val += this.indentate(level) + '<' + key + ' length="0"' + '/' + this.tagEndChar;
+        } else {
+          val += this.indentate(level) + '<' + key + ` length="${arrLen}"` + this.tagEndChar;
+          for (let j = 0; j < arrLen; j++) {
+            const item = jObj[key][j];
+            if (typeof item === 'undefined') {
+              // supress undefined node
+            } else if (item === null) {
+              val += this.indentate(level) + '<' + key + '/' + this.tagEndChar;
+            } else if (typeof item === 'object') {
+              const result = this.j2x(item, level + 2);
+              val += this.buildObjNode(result.val, j, result.attrStr, level + 1);
+            } else {
+              val += this.buildTextNode(item, key, '', level);
+            }
           }
+          val += this.indentate(level) + '</' + key  + this.tagEndChar;
         }
       }
     } else {
