@@ -92,7 +92,7 @@ Parser.prototype.j2x = function(jObj, level) {
     if (typeof jObj[key] === 'undefined') {
       // supress undefined node
     } else if (jObj[key] === null) {
-      val += this.indentate(level) + '<' + key + '/' + this.tagEndChar;
+      attrStr += ' ' + key + '="null"';
     } else if (jObj[key] instanceof Date) {
       val += this.buildTextNode(jObj[key], key, '', level);
     } else if (typeof jObj[key] !== 'object') {
@@ -139,7 +139,7 @@ Parser.prototype.j2x = function(jObj, level) {
             if (typeof item === 'undefined') {
               // supress undefined node
             } else if (item === null) {
-              val += this.indentate(level) + '<' + key + '/' + this.tagEndChar;
+              attrStr += ' ' + key + '="null"';
             } else if (typeof item === 'object') {
               const result = this.j2x(item, level + 2);
               val += this.buildObjNode(result.val, j, result.attrStr, level + 1);
