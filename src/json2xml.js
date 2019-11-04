@@ -142,7 +142,7 @@ Parser.prototype.j2x = function(jObj, level) {
               attrStr += ' ' + key + '="null"';
             } else if (typeof item === 'object') {
               const result = this.j2x(item, level + 2);
-              val += this.buildObjNode(result.val, j, result.attrStr, level + 1);
+              val += this.buildObjNode(result.val, result.attrStr.match(/type="(\w+)"/)[1], result.attrStr, level + 1);
             } else {
               val += this.buildTextNode(item, key, '', level);
             }

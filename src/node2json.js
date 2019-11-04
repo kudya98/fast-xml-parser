@@ -6,7 +6,21 @@ const convertArrayLikeObj = function(obj) {
   const keys = Object.keys(obj)
   keys.forEach(key => {
     if (obj[key] && typeof obj[key] === 'object' && !Array.isArray(obj[key]) && obj[key].length >= 0) {
-      obj[key] = Array.from(obj[key])
+      if (obj[key].length === 0) {
+        obj[key] = []
+      } else {
+        const arr = []
+        Object.values(obj[key]).forEach(val => {
+          if (typeof val === 'object') {
+            if (Array.isArray(val)) {
+              arr.push(...val)
+            } else {
+              arr.push(val)
+            }
+          }
+        })
+        obj[key] = arr
+      }
     }
     if (obj[key] && typeof obj[key] === "object") convertArrayLikeObj(obj[key])
   })
